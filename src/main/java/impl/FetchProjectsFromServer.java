@@ -1,4 +1,4 @@
-package diary;
+package impl;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -7,6 +7,9 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+
+import diary.FetchProjects;
+import diary.Project;
 
 public class FetchProjectsFromServer implements FetchProjects {
 

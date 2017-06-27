@@ -1,4 +1,4 @@
-package diary;
+package impl;
 
 import static java.nio.file.StandardOpenOption.*;
 
@@ -13,10 +13,14 @@ import java.util.List;
 
 import com.google.gson.Gson;
 
-public class FileStore {
+import diary.DiaryEntry;
+import diary.Store;
+
+public class FileStore implements Store {
 
 	private static final Path PATH = Paths.get(System.getProperty("user.home"), "diary.json");
 
+	@Override
 	public void write(List<DiaryEntry> entries) {
 		Gson gson = new Gson();
 		String json = gson.toJson(entries);
@@ -27,6 +31,7 @@ public class FileStore {
 		}
 	}
 
+	@Override
 	public List<DiaryEntry> read() {
 		String json = "";
 		try {
