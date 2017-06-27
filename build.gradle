@@ -1,6 +1,21 @@
 apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'signing'
 
-repositories { jcenter() }
+
+project.group = 'de.hhu.stups'
+
+
+repositories {
+  jcenter()
+  maven {
+		name "sonatype snapshots"
+		url "https://oss.sonatype.org/content/repositories/snapshots"
+	}
+	maven {
+		name "sonatype snapshots"
+		url "https://oss.sonatype.org/content/repositories/releases"
+	} }
 
 dependencies {
 	compile 'com.google.guava:guava:21.0'
@@ -10,3 +25,71 @@ dependencies {
 	testCompile 'junit:junit:4.12'
 }
 
+
+if (project.hasProperty('ossrhUsername') && project.hasProperty('ossrhPassword')) {
+
+	println "Configuring deployment for ${ project.name }"
+
+	apply plugin: 'signing'
+
+	task javadocJar(type: Jar) {
+		classifier = 'javadoc'
+		from javadoc
+	}
+
+	task sourcesJar(type: Jar) {
+		classifier = 'sources'
+		from sourceSets.main.allSource
+	}
+
+	artifacts { archives javadocJar, sourcesJar }
+
+
+	signing { sign configurations.archives }
+
+	uploadArchives {
+		repositories {
+			mavenDeployer {
+				beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+				repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+					authentication(userName: ossrhUsername, password: ossrhPassword)
+				}
+
+				snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+					authentication(userName: ossrhUsername, password: ossrhPassword)
+				}
+
+				pom.project {
+					name "propra_ss17.diary"
+					packaging 'jar'
+					// optionally artifactId can be defined here
+					description 'Propra 1 Projekt 6 Helper Library'
+					url 'http://www.bendisposto.de'
+
+					licenses {
+						license {
+							name 'Eclipse Public License, Version 1.0'
+							url 'http://www.eclipse.org/org/documents/epl-v10.html'
+						}
+					}
+
+					scm {
+						connection 'scm:git:git://github.com/bendisposto/propra_diary.git'
+						developerConnection 'scm:git:git@github.com:bendisposto/propra_diary.git'
+						url 'https://github.com/bendisposto/propra_diary'
+					}
+
+
+					developers {
+						developer {
+							id 'bendisposto'
+							name 'Jens Bendisposto'
+							email 'jens@bendisposto.de'
+						}
+					}
+				}
+			}
+		}
+	}
+}

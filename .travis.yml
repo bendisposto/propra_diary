@@ -1,7 +1,6 @@
 language: java
 jdk:
 - oraclejdk8
-
 before_install:
 - openssl aes-256-cbc -pass pass:$ENCRYPTION_PASSWORD -in secring.gpg.enc -out secring.gpg
   -d
@@ -9,7 +8,8 @@ before_install:
   -d
 - openssl aes-256-cbc -pass pass:$ENCRYPTION_PASSWORD -in gradle.properties.enc -out
   de.prob2.kernel/gradle.properties -d
-
-
 after_success:
 - TERM=dumb gradlew uploadArchives
+env:
+  global:
+    secure: EQzDBSz0+/gyQtN2AIlVPfiIfWBO+tDzHA8hUHlut+Rod7mX5UpEd5e79VcOKzdxhdEbFcChysYB67GsCLOGHnARiVnSlH8SmhGxMoVs1bchi3G085/VwmTg58Lz/1y8NUKuB9v/VbHrUiglc7ujYsq4l/P5A8S1/hUzbH4xHm6LNL0WAX5rNedW2uS0X622b90Jyp3ZCmR/cUHCU1Fd50g6tRt+j8Bpjee/K0EQmwLCt8sx6y4aUHsTOY/97AH/w1DX4Oq1i589K1K4vOM8qNspExbkkpWO0pD7zG6hcNG0WJVLSHtI8TQHpN+t+nmC/nuiB1OqEoATE7shT9WD6vacTyEbrsgmqI3xvEL5EypDorjlIJqsZ7Jgx1s5PwQN2qLVVf8tigamH2DAMLG/+VrDxrSOWDN9uKR4o2FOw/BwEqjXwxPcvNU2wuFUibyCRVU2yJWN1U2zQ5Eoran2NJa/LhV/GOJnqpTTNmAi817euRYAwdV6O3+GLt3goEdr7fxXVUXw3l+ucAdqD5wP9W+cbpuSbo5mxFZ0EV4Scu35T0TUJtzXmJErv1w4rkKCrLhEymx9mz7QrGHDyvJey89vqAXn0F5b7yqj+2hnfnwRDsMXG19D41mtDV9WLwY5oImMbn/1WkPKcZ1qtVcxhexYdoNyaMhJbqEiUwZBR40=
